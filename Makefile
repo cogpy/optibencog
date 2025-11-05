@@ -11,12 +11,12 @@ GROUP_ID := $(shell id -g)
 	test test-verbose test-coverage \
 	test-api-cpu test-api-cuda test-api-rocm test-api-misc \
 	test-api-cpu-examples test-api-cuda-examples test-api-rocm-examples \
-	test-cli-cpu-pytorch test-cli-cpu-openvino test-cli-cpu-py-txi test-cli-cpu-onnxruntime test-cli-cpu-ipex test-cli-cpu-llama-cpp \
-	test-cli-cpu-pytorch-examples test-cli-cpu-openvino-examples test-cli-cpu-onnxruntime-examples test-cli-cpu-py-txi-examples test-cli-cpu-llama-cpp-examples \
+	test-cli-cpu-pytorch test-cli-cpu-openvino test-cli-cpu-py-txi test-cli-cpu-onnxruntime test-cli-cpu-ipex test-cli-cpu-llama-cpp test-cli-cpu-opencog \
+	test-cli-cpu-pytorch-examples test-cli-cpu-openvino-examples test-cli-cpu-onnxruntime-examples test-cli-cpu-py-txi-examples test-cli-cpu-llama-cpp-examples test-cli-cpu-opencog-examples \
 	test-cli-cuda-pytorch-single test-cli-cuda-pytorch-multi \
 	test-cli-cuda-vllm-single test-cli-cuda-vllm-multi \
 	test-cli-cuda-tensorrt-llm-single test-cli-cuda-tensorrt-llm-multi \
-	test-cli-cuda-onnxruntime test-cli-cuda-py-txi \
+	test-cli-cuda-onnxruntime test-cli-cuda-py-txi test-cli-cuda-opencog \
 	test-cli-rocm-pytorch-single test-cli-rocm-pytorch-multi \
 	test-cli-rocm-pytorch-single-examples test-cli-rocm-pytorch-multi-examples \
 	test-cli-mps-pytorch test-cli-mps-pytorch-examples \
@@ -67,11 +67,13 @@ help:
 	@echo "  test-cli-cpu-onnxruntime              - Test CLI for CPU ONNXRuntime backend"
 	@echo "  test-cli-cpu-ipex                     - Test CLI for CPU Intel Extension for PyTorch"
 	@echo "  test-cli-cpu-llama-cpp                - Test CLI for CPU LLaMA-CPP backend"
+	@echo "  test-cli-cpu-opencog                  - Test CLI for CPU OpenCog backend"
 	@echo "  test-cli-cpu-pytorch-examples         - Test CLI examples for CPU PyTorch backend"
 	@echo "  test-cli-cpu-openvino-examples        - Test CLI examples for CPU OpenVINO backend"
 	@echo "  test-cli-cpu-onnxruntime-examples     - Test CLI examples for CPU ONNXRuntime backend"
 	@echo "  test-cli-cpu-py-txi-examples          - Test CLI examples for CPU Py-TXI backend"
 	@echo "  test-cli-cpu-llama-cpp-examples       - Test CLI examples for CPU LLaMA-CPP backend"
+	@echo "  test-cli-cpu-opencog-examples         - Test CLI examples for CPU OpenCog backend"
 	@echo "  test-cli-cuda-pytorch-single          - Test CLI for single GPU CUDA PyTorch backend"
 	@echo "  test-cli-cuda-pytorch-multi           - Test CLI for multi GPU CUDA PyTorch backend"
 	@echo "  test-cli-cuda-vllm-single             - Test CLI for single GPU CUDA vLLM backend"
@@ -80,6 +82,7 @@ help:
 	@echo "  test-cli-cuda-tensorrt-llm-multi      - Test CLI for multi GPU CUDA TensorRT-LLM backend"
 	@echo "  test-cli-cuda-onnxruntime             - Test CLI for CUDA ONNXRuntime backend"
 	@echo "  test-cli-cuda-py-txi                  - Test CLI for CUDA Py-TXI backend"
+	@echo "  test-cli-cuda-opencog                 - Test CLI for CUDA OpenCog backend"
 	@echo "  test-cli-rocm-pytorch-single          - Test CLI for single GPU ROCm PyTorch backend"
 	@echo "  test-cli-rocm-pytorch-multi           - Test CLI for multi GPU ROCm PyTorch backend"
 	@echo "  test-cli-rocm-pytorch-single-examples - Test CLI examples for single GPU ROCm PyTorch backend"
@@ -238,6 +241,9 @@ test-cli-cpu-ipex:
 test-cli-cpu-llama-cpp:
 	uv run --extra llama-cpp pytest tests/test_cli.py -s -v -k "llama_cpp"
 
+test-cli-cpu-opencog:
+	uv run pytest tests/test_cli.py -s -v -k "cli and cpu and opencog"
+
 ### CPU examples
 test-cli-cpu-pytorch-examples:
 	uv run pytest tests/test_examples.py -s -v -k "cli and cpu and pytorch"
@@ -257,6 +263,9 @@ test-cli-cpu-llama-cpp-examples:
 test-cli-cpu-ipex-examples:
 	uv run --extra ipex pytest tests/test_examples.py -s -v -k "cli and cpu and ipex"
 
+test-cli-cpu-opencog-examples:
+	uv run pytest tests/test_examples.py -s -v -k "cli and cpu and opencog"
+
 ### CUDA tests
 test-cli-cuda-onnxruntime:
 	uv run --extra onnxruntime-gpu pytest tests/test_cli.py -s -v -k "cli and cuda and onnxruntime"
@@ -275,6 +284,9 @@ test-cli-cuda-vllm-multi:
 
 test-cli-cuda-py-txi:
 	FORCE_SEQUENTIAL=1 uv run --extra py-txi pytest tests/test_cli.py -s -v -k "cli and cuda and (tgi or tei or txi)"
+
+test-cli-cuda-opencog:
+	uv run pytest tests/test_cli.py -s -v -k "cli and cuda and opencog"
 
 #### non-uv compatible
 test-cli-cuda-tensorrt-llm-single:
@@ -303,6 +315,9 @@ test-cli-cuda-vllm-multi-examples:
 
 test-cli-cuda-py-txi-examples:
 	FORCE_SEQUENTIAL=1 uv run --extra py-txi pytest tests/test_examples.py -s -v -k "cli and cuda and (tgi or tei or txi)"
+
+test-cli-cuda-opencog-examples:
+	uv run pytest tests/test_examples.py -s -v -k "cli and cuda and opencog"
 
 #### non-uv compatible
 test-cli-cuda-tensorrt-llm-single-examples:
