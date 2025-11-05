@@ -136,6 +136,13 @@ class OpenCogBackend(Backend[OpenCogConfig]):
         """
         self.logger.info(f"\t+ Loading model for agent {agent.id}")
 
+        # Ensure automodel_loader is available from parent class initialization
+        if not hasattr(self, "automodel_loader") or self.automodel_loader is None:
+            raise RuntimeError(
+                f"automodel_loader not initialized. Library {self.config.library} "
+                "may not be supported or parent __init__ failed."
+            )
+
         # For simplicity, we'll use the base class's model loading
         # In a full implementation, this would instantiate the delegate backend
         if self.config.library == "transformers":
@@ -156,6 +163,7 @@ class OpenCogBackend(Backend[OpenCogConfig]):
     def load(self) -> None:
         """Load all agent models."""
         self.logger.info("\t+ Creating backend temporary directory")
+        # Note: tmpdir is managed by parent Backend class, but we keep a reference
         self.tmpdir = TemporaryDirectory()
 
         if self.config.library not in ["transformers", "diffusers", "timm"]:
@@ -164,22 +172,31 @@ class OpenCogBackend(Backend[OpenCogConfig]):
             )
 
         # Load models based on coordination strategy
+        # Note: Currently all strategies use sequential loading as a safe default
+        # Future implementations could use multiprocessing/distributed systems
         if self.config.agent_coordination == "sequential":
+            self.logger.info("\t+ Loading agents sequentially")
             for agent in self.agents:
                 self._load_agent_model(agent)
         elif self.config.agent_coordination == "parallel":
-            # In a full implementation, this would use multiprocessing/threading
-            self.logger.info("\t+ Parallel loading enabled (sequential fallback)")
+            # TODO: Implement true parallel loading with threading/multiprocessing
+            self.logger.info("\t+ Parallel loading requested (using sequential fallback)")
             for agent in self.agents:
                 self._load_agent_model(agent)
         else:  # distributed
-            self.logger.info("\t+ Distributed loading enabled (sequential fallback)")
+            # TODO: Implement distributed loading with Ray or similar framework
+            self.logger.info("\t+ Distributed loading requested (using sequential fallback)")
             for agent in self.agents:
                 self._load_agent_model(agent)
 
-        # Set primary model to first agent's model for compatibility
+        # Set primary model to first agent's model for compatibility with parent Backend class
+        # NOTE: This is a compatibility measure. In multi-agent scenarios with heterogeneous
+        # models, some parent class operations may not work correctly with a single model reference.
+        # Callers should use agent-specific models via the agents list when possible.
         if self.agents and self.agents[0].model is not None:
             self.pretrained_model = self.agents[0].model
+        else:
+            self.logger.warning("\t+ No models loaded successfully")
 
         self.logger.info("\t+ All agents loaded successfully")
 

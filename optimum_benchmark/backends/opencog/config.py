@@ -63,10 +63,13 @@ class OpenCogConfig(BackendConfig):
                 "Supported engines are: pattern_matcher, pln, moses"
             )
 
-        if self.delegate_backend not in ["pytorch", "onnxruntime", "openvino", "vllm", "tensorrt-llm"]:
+        # List of known backends - this could be made more dynamic in the future
+        # by introspecting the backends module
+        known_backends = ["pytorch", "onnxruntime", "openvino", "vllm", "tensorrt-llm", "ipex", "llama-cpp"]
+        if self.delegate_backend not in known_backends:
             LOGGER.warning(
                 f"delegate_backend '{self.delegate_backend}' may not be fully supported. "
-                "Recommended backends are: pytorch, onnxruntime, openvino, vllm, tensorrt-llm"
+                f"Known backends are: {', '.join(known_backends)}"
             )
 
         # Initialize agent lists if not provided
