@@ -1,0 +1,66 @@
+# OpenCog Multi-Agent Orchestration Example - CUDA
+# This configuration demonstrates parallel multi-agent coordination on CUDA
+
+defaults:
+  - _base_
+  - _self_
+
+name: cuda_opencog_gpt2_parallel
+
+backend:
+  _target_: optimum_benchmark.backends.opencog.backend.OpenCogBackend
+  name: opencog
+  model: gpt2
+  device: cuda
+  no_weights: true
+  
+  # Multi-agent orchestration settings
+  num_agents: 2
+  agent_coordination: parallel  # Use parallel coordination for CUDA
+  agent_memory_sharing: true
+  
+  # Cognitive reasoning settings
+  reasoning_engine: pattern_matcher
+  atomspace_size: 10000
+  enable_attention_allocation: true
+  
+  # Agent-specific configurations
+  agent_models:
+    - gpt2
+    - gpt2
+  
+  agent_backends:
+    - pytorch
+    - pytorch
+  
+  agent_devices:
+    - cuda
+    - cuda
+  
+  # Orchestration workflow
+  workflow_strategy: adaptive
+  enable_self_optimization: true
+  
+  # Integration with existing backends
+  delegate_backend: pytorch
+  delegate_backend_config:
+    torch_dtype: float16
+  
+  # Performance tuning
+  communication_protocol: shared_memory
+  load_balancing: cognitive  # Use cognitive load balancing for optimal performance
+
+scenario:
+  _target_: optimum_benchmark.scenarios.inference.config.InferenceConfig
+  memory: true
+  latency: true
+  warmup_runs: 10
+  input_shapes:
+    batch_size: 1
+    sequence_length: 256
+  generate_kwargs:
+    max_new_tokens: 100
+    do_sample: false
+
+launcher:
+  _target_: optimum_benchmark.launchers.process.config.ProcessConfig
