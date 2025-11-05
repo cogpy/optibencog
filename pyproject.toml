@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "optimum-benchmark"
 dynamic = ["version"]
-description = "Optimum-Benchmark is a unified multi-backend utility for benchmarking Transformers, Timm, Diffusers and Sentence-Transformers with full support of Optimum's hardware optimizations & quantization schemes."
+description = "Optimum-Benchmark is a unified multi-backend utility for benchmarking Transformers, Timm, PEFT, Diffusers and Sentence-Transformers with full support of Optimum's hardware optimizations & quantization schemes."
 readme = "README.md"
 license = "Apache-2.0"
 authors = [{ name = "HuggingFace Inc. Special Ops Team" }]
@@ -39,6 +39,9 @@ keywords = [
     "diffusers",
     "timm",
     "peft",
+    "opencog",
+    "multi-agent",
+    "orchestration",
 ]
 classifiers = [
     "Intended Audience :: Education",

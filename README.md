@@ -320,6 +320,7 @@ See [TrainingConfig](optimum_benchmark/scenarios/training/config.py) for more in
 - [x] vLLM backend for CPU (`backend=vllm`, `backend.device=cpu`)
 - [x] IPEX backend for CPU (`backend=ipex`, `backend.device=cpu`)
 - [x] IPEX backend for XPU (`backend=ipex`, `backend.device=xpu`)
+- [x] OpenCog backend for multi-agent orchestration (`backend=opencog`, `backend.num_agents=3`, `backend.agent_coordination=parallel`)
 
 <details>
 <summary>General backend features 🧰</summary>
@@ -343,6 +344,7 @@ For more information on the features of each backend, you can check their respec
 - [PyTorchConfig](optimum_benchmark/backends/pytorch/config.py)
 - [ONNXRuntimeConfig](optimum_benchmark/backends/onnxruntime/config.py)
 - [TRTLLMConfig](optimum_benchmark/backends/tensorrt_llm/config.py)
+- [OpenCogConfig](optimum_benchmark/backends/opencog/config.py)
 
 </details>
 

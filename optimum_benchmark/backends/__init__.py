@@ -2,6 +2,7 @@ from .config import BackendConfig
 from .ipex.config import IPEXConfig
 from .llama_cpp.config import LlamaCppConfig
 from .onnxruntime.config import ONNXRuntimeConfig
+from .opencog.config import OpenCogConfig
 from .openvino.config import OpenVINOConfig
 from .py_txi.config import PyTXIConfig
 from .pytorch.config import PyTorchConfig
@@ -18,4 +19,5 @@ __all__ = [
     "BackendConfig",
     "VLLMConfig",
     "LlamaCppConfig",
+    "OpenCogConfig",
 ]

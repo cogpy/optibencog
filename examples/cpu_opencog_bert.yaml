@@ -1,0 +1,65 @@
+# OpenCog Multi-Agent Orchestration Example - CPU
+# This configuration demonstrates a simple multi-agent setup using OpenCog backend
+
+defaults:
+  - _base_
+  - _self_
+
+name: opencog_cpu_bert_multi_agent
+
+backend:
+  _target_: optimum_benchmark.backends.opencog.backend.OpenCogBackend
+  name: opencog
+  model: bert-base-uncased
+  device: cpu
+  no_weights: true
+  
+  # Multi-agent orchestration settings
+  num_agents: 3
+  agent_coordination: sequential  # sequential, parallel, distributed
+  agent_memory_sharing: true
+  
+  # Cognitive reasoning settings
+  reasoning_engine: pattern_matcher  # pattern_matcher, pln, moses
+  atomspace_size: 10000
+  enable_attention_allocation: true
+  
+  # Agent-specific configurations (optional, defaults to model/backend/device for all agents)
+  agent_models:
+    - bert-base-uncased
+    - bert-base-uncased
+    - bert-base-uncased
+  
+  agent_backends:
+    - pytorch
+    - pytorch
+    - pytorch
+  
+  agent_devices:
+    - cpu
+    - cpu
+    - cpu
+  
+  # Orchestration workflow
+  workflow_strategy: adaptive  # adaptive, static, dynamic
+  enable_self_optimization: true
+  
+  # Integration with existing backends
+  delegate_backend: pytorch  # Backend to use for actual inference
+  delegate_backend_config: {}
+  
+  # Performance tuning
+  communication_protocol: shared_memory  # shared_memory, message_passing
+  load_balancing: round_robin  # round_robin, least_loaded, cognitive
+
+scenario:
+  _target_: optimum_benchmark.scenarios.inference.config.InferenceConfig
+  memory: true
+  latency: true
+  warmup_runs: 10
+  input_shapes:
+    batch_size: 2
+    sequence_length: 128
+
+launcher:
+  _target_: optimum_benchmark.launchers.process.config.ProcessConfig
