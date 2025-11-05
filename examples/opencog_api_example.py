@@ -62,23 +62,23 @@ if __name__ == "__main__":
     print("\n" + "=" * 80)
     print("Running OpenCog Multi-Agent Orchestration Benchmark")
     print("=" * 80 + "\n")
-    
+
     benchmark_report = Benchmark.launch(benchmark_config)
 
     # Print orchestration metrics
     print("\n" + "=" * 80)
     print("Benchmark Results")
     print("=" * 80 + "\n")
-    
+
     print(f"Latency (mean): {benchmark_report.latency.mean:.4f} seconds")
     print(f"Throughput: {benchmark_report.latency.throughput:.2f} samples/second")
-    
-    if hasattr(benchmark_report, 'memory') and benchmark_report.memory:
+
+    if hasattr(benchmark_report, "memory") and benchmark_report.memory:
         print(f"Peak Memory: {benchmark_report.memory.max_ram / (1024**3):.2f} GB")
-    
+
     # Save results
     benchmark_config.save_json("opencog_benchmark_config.json")
     benchmark_report.save_json("opencog_benchmark_report.json")
-    
+
     print("\nResults saved to opencog_benchmark_*.json")
     print("\n" + "=" * 80)
